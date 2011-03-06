@@ -17,22 +17,26 @@
           key_input = document.getElementById('key');
 
       var key = (/([\w\d]{40})/g)(location.hash)[1],
-          parent_id = (/\/([\w\d_\-]+)\//g)(location.hash)[1];
+          parent_id = (/\/([\w\d_\-]+)\/$/g)(location.hash)[1];
 
       key_input.value = key;
 
 
       document.forms[0].action = './'+location.hash;
-      remove.href = '#!/remove/'+parent_id;
-      remove.onclick = function() {
-          current_value.text = '';
-      };
+      remove.target = '_parent';
+      remove.addEventListener('click', function(ev) {
+          try {
+          ev.preventDefault();
+          current_value.text = current_value.innerText = '';
+          window.top.location.hash = '#!/remove/'+parent_id+'/';
+          } catch(err) { console.error(err); }
+      }, false);
 
       if(current_value.text.length) {
           window.top.location.hash = '#!/ready/'+parent_id+'/'+encodeURIComponent(current_value.text);
       }
       file_input.onchange = function() {
-          window.top.location.hash = '#!/uploading';
+          window.top.location.hash = '#!/uploading/'+parent_id+'/';
           document.forms[0].submit();
       }; 
   </script>
