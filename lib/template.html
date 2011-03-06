@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <a id="current_value" target="_parent" href="#">{{ filename }}</a>
+  <a id="remove" target="_parent" href="#">remove</a>
+  <form name="files" method="POST" action="./" enctype="multipart/formdata">
+      <input id="key" type="hidden" name="key" value="" />
+      <input id="file" type="file" name="file" />
+  </form>
+  <script>
+      var current_value = document.getElementById('current_value'),
+          file_input = document.getElementById('file'),
+          key_input = document.getElementById('key');
+
+      var key = (/([\w\d]{40})/g)(location.hash)[1],
+          parent_id = (/\/([\w\d_\-]+)\//g)(location.hash)[1];
+
+      key_input.value = key;
+
+
+      document.forms[0].action = './'+location.hash;
+      remove.href = '#!/remove/'+parent_id;
+      remove.onclick = function() {
+          current_value.text = '';
+      };
+
+      if(current_value.text.length) {
+          window.top.location.hash = '#!/ready/'+parent_id+'/'+encodeURIComponent(current_value.text);
+      }
+      file_input.onchange = function() {
+          window.top.location.hash = '#!/uploading';
+          document.forms[0].submit();
+      }; 
+  </script>
+  
+</body>
+</html>
